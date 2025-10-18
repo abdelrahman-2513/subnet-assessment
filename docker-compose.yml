@@ -26,8 +26,17 @@ services:
     restart: unless-stopped
     environment:
       - ASPNETCORE_HTTP_PORTS=5049
-    env_file:
-      - ./backend/.env
+      - DB_SERVER=mysql
+      - DB_PORT=3306
+      - DB_NAME=cyshield
+      - DB_USER=cyshield_user
+      - DB_PASSWORD=cyshield_password
+      - MYSQL_ROOT_PASSWORD=your_secure_root_password
+      - JWT_KEY=YourSuperSecretJWTKeyThatIsAtLeast32CharactersLong!
+      - JWT_ISSUER=Cyshield
+      - JWT_AUDIENCE=CyshieldUsers
+      - JWT_EXPIRE_MINUTES=60
+      - WHITELIST=http://localhost:4200
     depends_on:
       - mysql
     volumes:

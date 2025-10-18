@@ -29,8 +29,8 @@ A web application for managing network subnets and IP addresses. This system all
 
 1. Clone the repository
    ```bash
-   git clone <repository-url>
-   cd cyshield
+   git clone https://github.com/abdelrahman-2513/subnet-assessment.git
+   cd subnet-assessment
    ```
 
 2. Start the application
