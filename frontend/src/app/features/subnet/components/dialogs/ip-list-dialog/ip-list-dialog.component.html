@@ -1,0 +1,52 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>IP Addresses - {{ data.subnet.subnetName }}</h2>
+  <button mat-icon-button (click)="onClose()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <div class="subnet-info">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Selected Subnet</mat-label>
+      <input matInput [value]="data.subnet.subnetName + ' (' + data.subnet.subnetAddress + ')'" disabled>
+    </mat-form-field>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading IPs...</p>
+    </div>
+  } @else {
+    <div class="ip-items">
+      @for (ip of ips; track ip.ipId) {
+        <div class="ip-item">
+          <div class="ip-info">
+            <span class="ip-address">{{ ip.ipAddress }}</span>
+          </div>
+         
+        </div>
+      }
+    </div>
+
+    @if (ips.length === 0) {
+      <div class="no-ips">
+        <p>No IP addresses found for this subnet.</p>
+      </div>
+    }
+  }
+
+  @if (totalCount > 0) {
+    <app-paginated-list
+      [totalCount]="totalCount"
+      [pageNumber]="pageNumber"
+      [pageSize]="currentPageSize"
+      (pageChange)="onPageChange($event)">
+    </app-paginated-list>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onClose()">Close</button>
+</mat-dialog-actions>

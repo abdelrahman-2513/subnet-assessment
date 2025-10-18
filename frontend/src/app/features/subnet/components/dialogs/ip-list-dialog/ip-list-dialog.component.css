@@ -1,0 +1,102 @@
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.dialog-header h2 {
+  margin: 0;
+}
+
+::ng-deep .mat-dialog-content {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 0 24px;
+}
+
+.subnet-selector {
+  margin-bottom: 1.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.ip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.ip-header h3 {
+  margin: 0;
+  color: #1f2937;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.ip-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.ip-item {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ip-item:hover {
+  border-color: #3b82f6;
+  background-color: #f8fafc;
+}
+
+.ip-address {
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.ip-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.no-ips {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.page-info {
+  color: #6b7280;
+  font-size: 0.9rem;
+}

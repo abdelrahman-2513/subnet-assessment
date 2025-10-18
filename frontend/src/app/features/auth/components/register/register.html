@@ -1,0 +1,56 @@
+<div class="form-container">
+  <mat-card>
+    <mat-card-title>Register</mat-card-title>
+
+    <form [formGroup]="RegisterForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Ex. pat@example.com" />
+        @if (RegisterForm.get('email')?.hasError('required')) {
+          <mat-error>Email is <strong>required</strong></mat-error>
+        }
+        @if (RegisterForm.get('email')?.hasError('email') && !RegisterForm.get('email')?.hasError('required')) {
+          <mat-error>Please enter a valid email address</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" placeholder="Enter your password" />
+        @if (RegisterForm.get('password')?.hasError('required')) {
+          <mat-error>Password is <strong>required</strong></mat-error>
+        }
+        @if (RegisterForm.get('password')?.hasError('minlength')) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" formControlName="confirmPassword" placeholder="Confirm your password" />
+        @if (RegisterForm.get('confirmPassword')?.hasError('required')) {
+          <mat-error>Confirm Password is <strong>required</strong></mat-error>
+        }
+        @if (RegisterForm.get('confirmPassword')?.hasError('passwordsMismatch')) {
+          <mat-error>Passwords do not match</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="RegisterForm.invalid || isLoading">
+        {{ isLoading ? 'Registering...' : 'Register' }}
+      </button>
+
+      @if (isLoading) {
+        <div class="loading-spinner">
+          <mat-spinner diameter="35"></mat-spinner>
+        </div>
+      }
+    </form>
+
+    @if (errorMessage) {
+      <div class="error">{{ errorMessage }}</div>
+    }
+
+    <p>Already have an account? <a routerLink="/auth/login">Login</a></p>
+  </mat-card>
+</div>

@@ -1,0 +1,44 @@
+<div class="subnet-list">
+  <div class="header">
+    <h2>Subnets</h2>
+    <button mat-raised-button color="primary" (click)="onAdd()">
+      <mat-icon>add</mat-icon>
+      Add Subnet
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading subnets...</p>
+    </div>
+  } @else {
+    <div class="subnet-items">
+      @for (subnet of subnets; track subnet.subnetId) {
+        <div class="subnet-item" (click)="onEdit(subnet)">
+          <div class="subnet-info">
+            <h3>{{ subnet.subnetName }}</h3>
+            <p>{{ subnet.subnetAddress }}</p>
+          </div>
+          <div class="subnet-actions">
+            <button mat-icon-button (click)="onViewIps(subnet); $event.stopPropagation()" 
+                    matTooltip="View IPs">
+              <mat-icon>arrow_downward</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="onDelete(subnet.subnetId); $event.stopPropagation()"
+                    matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <app-paginated-list
+    [totalCount]="totalCount"
+    [pageNumber]="pageNumber"
+    [pageSize]="currentPageSize"
+    (pageChange)="onPageChange($event)">
+  </app-paginated-list>
+</div>

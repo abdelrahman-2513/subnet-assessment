@@ -1,0 +1,49 @@
+<div class="form-container">
+  <mat-card>
+    <mat-card-title>Login</mat-card-title>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Ex. pat@example.com" />
+        @if (loginForm.get('email')?.hasError('required')) {
+          <mat-error>Email is <strong>required</strong></mat-error>
+        }
+        @if (loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
+          <mat-error>Invalid email</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" placeholder="Enter your password" />
+        @if (loginForm.get('password')?.hasError('required')) {
+          <mat-error>Password is <strong>required</strong></mat-error>
+        }
+        @if (loginForm.get('password')?.hasError('minlength')) {
+          <mat-error>Minimum 6 characters</mat-error>
+        }
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="loginForm.invalid || isLoading">
+        {{ isLoading ? 'Logging in...' : 'Login' }}
+      </button>
+
+      @if (isLoading) {
+        <div class="loading-spinner">
+          <mat-spinner diameter="35"></mat-spinner>
+        </div>
+      }
+    </form>
+
+    @if (errorMessage) {
+      <div class="error">{{ errorMessage }}</div>
+    }
+
+    <p>Don't have an account? <a routerLink="/auth/register">Register</a></p>
+  </mat-card>
+</div>

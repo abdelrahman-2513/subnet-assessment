@@ -1,0 +1,66 @@
+<div class="ip-list">
+  <div class="header">
+    <h2>IP Management</h2>
+    <button mat-raised-button color="primary" (click)="onAddIp()">
+      <mat-icon>add</mat-icon>
+      Add IP
+    </button>
+  </div>
+
+  <div class="subnet-selector">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Select Subnet</mat-label>
+      <mat-select [formControl]="$any(subnetForm.get('subnetId'))">
+        @for (subnet of subnets; track subnet.subnetId) {
+          <mat-option [value]="subnet.subnetId">
+            {{ subnet.subnetName }} ({{ subnet.subnetAddress }})
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  @if (!selectedSubnetId()) {
+    <div class="no-subnet-selected">
+      <p>Please select a subnet to view and manage IP addresses.</p>
+    </div>
+  }
+
+  @if (selectedSubnetId() && isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading IPs...</p>
+    </div>
+  } @else if (selectedSubnetId()) {
+    <div class="ip-items">
+      @for (ip of ips; track ip.ipId) {
+        <div class="ip-item" (click)="onEditIp(ip)">
+          <div class="ip-info">
+            <span class="ip-address">{{ ip.ipAddress }}</span>
+          </div>
+          <div class="ip-actions">
+            <button mat-icon-button color="warn" (click)="onDeleteIp(ip.ipId); $event.stopPropagation()"
+                    matTooltip="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (ips.length === 0) {
+      <div class="no-ips">
+        <p>No IP addresses found for this subnet.</p>
+      </div>
+    }
+  }
+
+  @if (selectedSubnetId() && totalCount > 0) {
+    <app-paginated-list
+      [totalCount]="totalCount"
+      [pageNumber]="pageNumber"
+      [pageSize]="currentPageSize"
+      (pageChange)="onPageChange($event)">
+    </app-paginated-list>
+  }
+</div>

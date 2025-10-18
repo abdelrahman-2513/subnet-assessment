@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: cyshield-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: your_secure_root_password
+      MYSQL_DATABASE: cyshield
+      MYSQL_USER: cyshield_user
+      MYSQL_PASSWORD: cyshield_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - cyshield-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: cyshield-backend
+    ports:
+      - "5049:5049"
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    depends_on:
+      - mysql
+    volumes:
+      - ./backend:/src
+    networks:
+      - cyshield-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cyshield-frontend
+    restart: unless-stopped
+    ports:
+      - "4200:4200"
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=4096
+    depends_on:
+      - backend
+    networks:
+      - cyshield-network
+
+volumes:
+  mysql_data:
+
+networks:
+  cyshield-network:
+    driver: bridge

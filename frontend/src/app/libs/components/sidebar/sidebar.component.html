@@ -1,0 +1,8 @@
+<nav class="sidebar">
+  <ul>
+    <li *ngFor="let item of menuItems" (click)="navigateTo(item.route)" routerLinkActive="active">
+      <span class="material-icons">{{ item.icon }}</span>
+      <span class="label">{{ item.label }}</span>
+    </li>
+  </ul>
+</nav>

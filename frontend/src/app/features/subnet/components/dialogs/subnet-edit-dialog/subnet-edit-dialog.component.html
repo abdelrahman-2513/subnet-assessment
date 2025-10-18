@@ -1,0 +1,45 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>{{ isEditMode ? 'Edit Subnet' : 'Add Subnet' }}</h2> <button mat-icon-button
+    (click)="onCancel()"> <mat-icon>close</mat-icon> </button>
+</div> <mat-dialog-content class="dialog-content"> @if (isEditMode) { <form [formGroup]="subnetForm"
+    class="form-container"> <mat-form-field appearance="outline" class="full-width"> <mat-label>Subnet Name</mat-label>
+      <input matInput formControlName="subnetName" placeholder="Enter subnet name"> @if
+      (subnetForm.get('subnetName')?.hasError('required')) { <mat-error>Subnet name is required</mat-error> } @if
+      (subnetForm.get('subnetName')?.hasError('minlength')) { <mat-error>Subnet name must be at least 3
+        characters</mat-error> } @if (subnetForm.get('subnetName')?.hasError('maxlength')) { <mat-error>Subnet name must
+        be less than 50 characters</mat-error> } </mat-form-field> <mat-form-field appearance="outline"
+      class="full-width"> <mat-label>Subnet Address</mat-label> <input matInput formControlName="subnetAddress"
+        placeholder="192.168.0.0/24"> @if (subnetForm.get('subnetAddress')?.hasError('required')) { <mat-error>Subnet
+        address is required</mat-error> } @if (subnetForm.get('subnetAddress')?.hasError('pattern')) {
+      <mat-error>Invalid subnet format. Example: 192.168.0.0/24</mat-error> } </mat-form-field> </form> } @else {
+  <mat-tab-group (selectedTabChange)="onTabChange($event.index)"> <mat-tab label="Manual Entry">
+      <form [formGroup]="subnetForm" class="form-container"> <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Subnet Name</mat-label> <input matInput formControlName="subnetName"
+            placeholder="Enter subnet name"> @if (subnetForm.get('subnetName')?.hasError('required')) {
+          <mat-error>Subnet name is required</mat-error> } @if (subnetForm.get('subnetName')?.hasError('minlength')) {
+          <mat-error>Subnet name must be at least 3 characters</mat-error> } @if
+          (subnetForm.get('subnetName')?.hasError('maxlength')) { <mat-error>Subnet name must be less than 50
+            characters</mat-error> } </mat-form-field> <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Subnet Address</mat-label> <input matInput formControlName="subnetAddress"
+            placeholder="192.168.0.0/24"> @if (subnetForm.get('subnetAddress')?.hasError('required')) {
+          <mat-error>Subnet address is required</mat-error> } @if (subnetForm.get('subnetAddress')?.hasError('pattern'))
+          { <mat-error>Invalid subnet format. Example: 192.168.0.0/24</mat-error> } </mat-form-field> <mat-checkbox
+          formControlName="createIps" class="full-width"> Generate IP addresses for this subnet </mat-checkbox> </form>
+    </mat-tab> <mat-tab label="File Upload">
+      <form [formGroup]="fileForm" class="form-container">
+        <div class="file-upload-container"> <input type="file" #fileInput (change)="onFileSelected($event)"
+            accept=".csv,.txt,.json" style="display: none;"> <button mat-raised-button type="button"
+            (click)="fileInput.click()" class="file-button"> <mat-icon>cloud_upload</mat-icon> Choose File </button> @if
+          (selectedFile) { <div class="file-info"> <span class="file-name">{{ selectedFile.name }}</span> </div> } @else
+          { <span class="file-placeholder">No file selected</span> } </div>
+        <div class="file-format-info">
+          <p><strong>Supported formats:</strong> CSV, TXT</p>
+          <p><strong>CSV Format:</strong> subnetName,subnetAddress</p>
+        </div> <mat-checkbox formControlName="createIps" class="full-width"> Generate IP addresses from file data
+        </mat-checkbox>
+      </form>
+    </mat-tab> </mat-tab-group> } </mat-dialog-content> <mat-dialog-actions align="end"> <button mat-button
+    (click)="onCancel()">Cancel</button> <button mat-raised-button color="primary"
+    [disabled]="isEditMode ? !subnetForm.valid : (!subnetForm.valid && !(selectedFile && fileForm.valid))"
+    (click)="onSave()"> {{ isEditMode ? 'Update' : 'Create' }} </button> 
+  </mat-dialog-actions>

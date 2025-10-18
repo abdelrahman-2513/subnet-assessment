@@ -1,0 +1,30 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>{{ isEditMode ? 'Edit IP Address' : 'Add IP Address' }}</h2>
+  <button mat-icon-button (click)="onCancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="ipForm" class="form-container">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>IP Address</mat-label>
+      <input matInput formControlName="ipAddress" placeholder="192.168.0.1">
+      @if (ipForm.get('ipAddress')?.hasError('required')) {
+        <mat-error>IP address is required</mat-error>
+      }
+      @if (ipForm.get('ipAddress')?.hasError('pattern')) {
+        <mat-error>Invalid IP address format. Example: 192.168.0.1</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" 
+          [disabled]="!ipForm.valid"
+          (click)="onSave()">
+    {{ isEditMode ? 'Update' : 'Create' }}
+  </button>
+</mat-dialog-actions>

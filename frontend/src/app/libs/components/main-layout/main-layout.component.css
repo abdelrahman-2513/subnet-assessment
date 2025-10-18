@@ -1,0 +1,17 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f9fafb;
+
+  .layout-body {
+    display: flex;
+    flex: 1;
+  }
+
+  .layout-content {
+    flex: 1;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+}

@@ -1,0 +1,71 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title>Add IP Address</h2>
+  <button mat-icon-button (click)="onCancel()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content>
+  @if (isLoading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading...</p>
+    </div>
+  } @else {
+    <form [formGroup]="ipForm" class="form-container">
+      @if (!data?.subnetId) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Select Subnet</mat-label>
+          <mat-select [formControl]="$any(ipForm.get('subnetId'))">
+            @for (subnet of subnets; track subnet.subnetId) {
+              <mat-option [value]="subnet.subnetId">
+                {{ subnet.subnetName }} ({{ subnet.subnetAddress }})
+              </mat-option>
+            }
+          </mat-select>
+          @if (ipForm.get('subnetId')?.hasError('required')) {
+            <mat-error>Please select a subnet</mat-error>
+          }
+        </mat-form-field>
+      } @else {
+        <div class="selected-subnet-info">
+          <p><strong>Selected Subnet:</strong> {{ getSelectedSubnetName() }}</p>
+        </div>
+      }
+
+      @if (isSubnetSelected) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>IP Address</mat-label>
+          <input matInput formControlName="ipAddress" placeholder="192.168.0.1">
+          @if (ipForm.get('ipAddress')?.hasError('required')) {
+            <mat-error>IP address is required</mat-error>
+          }
+          @if (ipForm.get('ipAddress')?.hasError('pattern')) {
+            <mat-error>Invalid IP address format. Example: 192.168.0.1</mat-error>
+          }
+        </mat-form-field>
+      }
+
+      @if (!isSubnetSelected) {
+        <div class="subnet-info">
+          <p>Please select a subnet first to add an IP address.</p>
+        </div>
+      }
+    </form>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    [disabled]="!isFormValid || isLoading()"
+    (click)="onAddIp()">
+    @if (createIpMutation.isPending()) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      <span>Add IP</span>
+    }
+  </button>
+</mat-dialog-actions>

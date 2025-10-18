@@ -1,0 +1,20 @@
+<div class="pagination-container">
+  <button mat-icon-button (click)="prevPage()" [disabled]="!hasPreviousPage">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  @for (p of pages; track p) {
+    <button
+      mat-button
+      (click)="changePage(p)"
+      [class.active]="p === pageNumber">
+      {{ p }}
+    </button>
+  }
+
+  <button mat-icon-button (click)="nextPage()" [disabled]="!hasNextPage">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+
+  <span class="info">Page {{ pageNumber }} of {{ totalPages }}</span>
+</div>
