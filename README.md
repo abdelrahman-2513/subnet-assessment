@@ -183,9 +183,8 @@ Supported file formats:
 - JWT configuration
 - CORS whitelist
 
-**Frontend (.env)**
+**Frontend (enviroments/environment.ts)**
 - API endpoint URL
-- Environment-specific settings
 
 ## Troubleshooting
 
@@ -213,11 +212,9 @@ docker-compose up --build
 ## Future Improvements
 
 - Add role-based access control
-- Implement API rate limiting
 - Add unit and integration tests
 
 
-This project is created for educational purposes.
 
 ## Contributing
 
