@@ -96,6 +96,46 @@ builder.Logging.AddConsole();
 
 var app = builder.Build();
 
+// For Database Migration on Startup
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    
+    logger.LogInformation("Starting database migration...");
+    
+    try
+    {
+        var maxRetries = 10;
+        var retryCount = 0;
+        
+        while (retryCount < maxRetries)
+        {
+            try
+            {
+                context.Database.Migrate();
+                logger.LogInformation("Database migration completed successfully.");
+                break;
+            }
+            catch (Exception ex) when (retryCount < maxRetries - 1)
+            {
+                retryCount++;
+                logger.LogWarning($"Database migration attempt {retryCount} failed. Retrying in 5 seconds... Error: {ex.Message}");
+                Thread.Sleep(5000);
+            }
+        }
+        
+        if (retryCount >= maxRetries)
+        {
+            logger.LogError("Database migration failed after all retry attempts.");
+        }
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while migrating the database.");
+    }
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

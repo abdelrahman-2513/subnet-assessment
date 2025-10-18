@@ -191,7 +191,7 @@ Supported file formats:
 ### Common Issues
 
 1. **Docker not running**: Make sure Docker Desktop is running before starting the application
-2. **Port conflicts**: If ports 3306, 4200, or 5000 are already in use, stop the conflicting services
+2. **Port conflicts**: If ports 3306, 4200, or 5049 are already in use, stop the conflicting services
 3. **Database connection issues**: Wait a few seconds after starting for MySQL to fully initialize
 4. **Frontend not loading**: Check if the backend is running and accessible at http://localhost:5000
 
