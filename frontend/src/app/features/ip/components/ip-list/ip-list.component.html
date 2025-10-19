@@ -1,7 +1,7 @@
 <div class="ip-list">
   <div class="header">
     <h2>IP Management</h2>
-    <button mat-raised-button class="add-ip-btn" (click)="onAddIp()">
+    <button  class="add-ip-btn" (click)="onAddIp()">
       <mat-icon>add</mat-icon>
       Add IP
     </button>
@@ -39,7 +39,7 @@
             <span class="ip-address">{{ ip.ipAddress }}</span>
           </div>
           <div class="ip-actions">
-            <button mat-icon-button color="warn" (click)="onDeleteIp(ip.ipId); $event.stopPropagation()"
+            <button mat-icon-button class="delete-btn" (click)="onDeleteIp(ip.ipId); $event.stopPropagation()"
                     matTooltip="Delete">
               <mat-icon>delete</mat-icon>
             </button>

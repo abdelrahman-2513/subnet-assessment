@@ -1,2 +1,216 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Global animations and interactive enhancements */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes ripple {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: calc(200px + 100%) 0; }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+/* Global interactive enhancements */
+* {
+  box-sizing: border-box;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+
+
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.ripple-effect:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+button, .ip-item, .subnet-item, .pagination-container button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Improved mat-spinner styling */
+mat-spinner {
+  animation: pulse 2s infinite;
+}
+
+/* Enhanced form field interactions */
+mat-form-field {
+  transition: all 0.3s ease;
+}
+
+
+
+mat-select {
+  transition: all 0.3s ease;
+}
+
+mat-option {
+  transition: all 0.2s ease;
+}
+
+mat-option:hover {
+  background-color: #f3f4f6;
+  transform: translateX(5px);
+}
+
+/* Enhanced mat-icon-button interactions */
+mat-icon-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+mat-icon-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(31, 41, 55, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s, height 0.3s;
+}
+
+mat-icon-button:active::before {
+  width: 100px;
+  height: 100px;
+}
+
+/* Enhanced mat-tooltip styling */
+.mat-mdc-tooltip {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Smooth page transitions */
+.page-transition {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Enhanced focus indicators */
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-focus-overlay {
+  opacity: 0.12;
+  transition: opacity 0.3s ease;
+}
+
+.interactive-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.success-animation {
+  animation: bounce 0.6s ease;
+}
+
+.error-animation {
+  animation: pulse 0.5s ease;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+mat-icon[mat-icon-button] mat-icon,
+mat-icon:contains("arrow_downward"),
+mat-icon:contains("location"),
+mat-icon:contains("place"),
+mat-icon:contains("pin"),
+mat-icon:contains("my_location"),
+mat-icon:contains("room"),
+mat-icon:contains("near_me") {
+  color: #ef4444 !important;
+}
+
+.subnet-actions mat-icon[mat-icon-button] mat-icon,
+.ip-actions mat-icon[mat-icon-button] mat-icon {
+  color: #ef4444 !important;
+  transition: all 0.3s ease;
+}
+
+.subnet-actions mat-icon[mat-icon-button]:hover mat-icon,
+.ip-actions mat-icon[mat-icon-button]:hover mat-icon {
+  color: #dc2626 !important;
+  transform: scale(1.1);
+}
+
+.mdc-dialog--open .mat-mdc-dialog-surface, .mdc-dialog--closing .mat-mdc-dialog-surface 
+{
+    overflow-x: hidden;
+}
