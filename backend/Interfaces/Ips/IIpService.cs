@@ -12,5 +12,6 @@ namespace backend.Interfaces.Ips
         Task<PaginatedResponseDto<Ip>> GetIpsBySubnetAsync(int subnetId, int pageNumber, int pageSize, int userId);
         Task<ResponseDto<Ip>> UpdateIpAsync(int id, UpdateIpDto request, int userId);
         Task<ResponseDto<bool>> DeleteIpAsync(int id, int userId);
+        Task<bool> DeleteManyBySubnet(int subnetId);
     }
 }

@@ -226,6 +226,16 @@ namespace backend.Services
                     };
                 }
 
+                var isDeletedIps = await this._ipService.DeleteManyBySubnet(id);
+                if (!isDeletedIps)
+                {
+                    return new ResponseDto<Subnet?>
+                    {
+                        Status = 500,
+                        Message = "Try Again Later!"
+                    };
+                }
+
                 subnet.SubnetName = request.SubnetName;
                 subnet.SubnetAddress = request.SubnetAddress;
 

@@ -4,7 +4,9 @@ using backend.DTOs.Subnets;
 using backend.Interfaces.Ips;
 using backend.Interfaces.Subnets;
 using backend.Models;
+using backend.Helpers;
 using Microsoft.Extensions.Logging;
+
 
 namespace backend.Services
 {
@@ -25,7 +27,16 @@ namespace backend.Services
         {
             try
             {
-                if (!System.Net.IPAddress.TryParse(request.IpAddress, out var _))
+                var subnet = await _subnetRepository.GetByIdAsync(request.SubnetId, userId);
+                if (subnet == null)
+                {
+                    return new ResponseDto<Ip>
+                    {
+                        Status = 404,
+                        Message = "Subnet not found or not owned by the user."
+                    };
+                }
+                if (!IpValidator.isValidIP(request.IpAddress, subnet.SubnetAddress))
                 {
                     return new ResponseDto<Ip>
                     {
@@ -34,13 +45,13 @@ namespace backend.Services
                     };
                 }
 
-                var subnet = await _subnetRepository.GetByIdAsync(request.SubnetId, userId);
-                if (subnet == null)
+                var ipExisted = await _ipRepository.isExist(request.IpAddress, userId,request.SubnetId);
+                if (ipExisted != null)
                 {
                     return new ResponseDto<Ip>
                     {
-                        Status = 404,
-                        Message = "Subnet not found or not owned by the user."
+                        Status = 400,
+                        Message = "Ip Address Already Exist in Subnet."
                     };
                 }
 
@@ -77,16 +88,7 @@ namespace backend.Services
         {
             try
             {
-                var subnet = await _subnetRepository.GetByIdAsync(subnetId, userId);
-                if (subnet == null)
-                {
-                    return new ResponseDto<IEnumerable<Ip>>
-                    {
-                        Status = 404,
-                        Message = "Subnet not found or not owned by the user."
-                    };
-                }
-
+                
                 var ips = ipAddresses.Select(ip => new Ip
                 {
                     IpAddress = ip,
@@ -158,15 +160,6 @@ namespace backend.Services
         {
             try
             {
-                if (!System.Net.IPAddress.TryParse(request.IpAddress, out var _))
-                {
-                    return new ResponseDto<Ip>
-                    {
-                        Status = 400,
-                        Message = "Invalid IP address format."
-                    };
-                }
-
                 var ip = await _ipRepository.GetByIdAsync(id, userId);
                 if (ip == null)
                 {
@@ -176,6 +169,33 @@ namespace backend.Services
                         Message = "IP not found or not owned by the user."
                     };
                 }
+                var subnet = await _subnetRepository.GetByIdAsync(ip.SubnetId, userId);
+                if (subnet == null)
+                {
+                    return new ResponseDto<Ip>
+                    {
+                        Status = 404,
+                        Message = "Subnet not found or not owned by the user."
+                    };
+                }
+                if (!IpValidator.isValidIP(request.IpAddress, subnet.SubnetAddress))
+                {
+                    return new ResponseDto<Ip>
+                    {
+                        Status = 400,
+                        Message = "Invalid IP address format."
+                    };
+                }
+                var ipExisted = await _ipRepository.isExist(request.IpAddress, userId, ip.SubnetId);
+                if (ipExisted != null)
+                {
+                    return new ResponseDto<Ip>
+                    {
+                        Status = 400,
+                        Message = "Ip Address Already Exist in Subnet."
+                    };
+                }
+                
 
                 ip.IpAddress = request.IpAddress;
                 await _ipRepository.UpdateAsync(ip);
@@ -231,6 +251,22 @@ namespace backend.Services
                     Status = 500,
                     Message = "An unexpected error occurred while deleting the IP."
                 };
+            }
+        }
+
+        public async Task<bool> DeleteManyBySubnet(int subnetId)
+        {
+            try
+            {
+                await _ipRepository.DeleteBulkBySubnetAsync(subnetId);
+                await _ipRepository.SaveChangesAsync();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting IP.");
+                return false;
             }
         }
     }

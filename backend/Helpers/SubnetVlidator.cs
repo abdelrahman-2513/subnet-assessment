@@ -6,22 +6,29 @@ namespace backend.Helpers
     {
         public static bool IsValidCidr(string cidr)
         {
-            if (string.IsNullOrWhiteSpace(cidr))
-                return false;
+            try
+            {
+                var parts = cidr.Split('/');
+                if (parts.Length != 2) return false;
 
-            var parts = cidr.Split('/');
-            if (parts.Length != 2)
-                return false;
+                if (!IPAddress.TryParse(parts[0], out var ipAddress))
+                    return false;
 
-            // Validate IP part
-            if (!IPAddress.TryParse(parts[0], out var _))
-                return false;
+                if (!int.TryParse(parts[1], out var prefix) || prefix < 0 || prefix > 32)
+                    return false;
 
-            // Validate prefix part (must be between 0–32 for IPv4)
-            if (!int.TryParse(parts[1], out int prefixLength))
-                return false;
+                var ipBytes = ipAddress.GetAddressBytes();
+                uint ip = BitConverter.ToUInt32(ipBytes.Reverse().ToArray(), 0);
+                uint mask = uint.MaxValue << (32 - prefix);
 
-            return prefixLength >= 0 && prefixLength <= 32;
+                uint networkAddress = ip & mask;
+
+                return networkAddress == ip;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
