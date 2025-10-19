@@ -1,7 +1,7 @@
 <div class="subnet-list">
   <div class="header">
     <h2>Subnets</h2>
-    <button mat-raised-button color="primary" (click)="onAdd()">
+    <button mat-raised-button class="add-subnet-btn" (click)="onAdd()">
       <mat-icon>add</mat-icon>
       Add Subnet
     </button>
@@ -14,6 +14,12 @@
     </div>
   } @else {
     <div class="subnet-items">
+
+      @if (subnets.length === 0) {
+      <div class="no-subnets">
+        <p>No subnets found.</p>
+      </div>
+    }
       @for (subnet of subnets; track subnet.subnetId) {
         <div class="subnet-item" (click)="onEdit(subnet)">
           <div class="subnet-info">
@@ -25,7 +31,7 @@
                     matTooltip="View IPs">
               <mat-icon>arrow_downward</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="onDelete(subnet.subnetId); $event.stopPropagation()"
+            <button mat-icon-button color="warn" class="delete-btn" (click)="onDelete(subnet.subnetId); $event.stopPropagation()"
                     matTooltip="Delete">
               <mat-icon>delete</mat-icon>
             </button>
